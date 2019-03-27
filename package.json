@@ -1,0 +1,38 @@
+{
+  "name": "webdb-iii-challenge",
+  "version": "1.0.0",
+  "description": "## Topics",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.4",
+    "helmet": "^3.16.0",
+    "knex": "^0.16.3",
+    "nodemon": "^1.18.10"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "server": "nodemon",
+    "initdb": "knex init",
+    "table-cohorts": "knex migrate:make createCohortsTable",
+    "table-students": "knex migrate:make createStudentsTable",
+    "migrate": "knex migrate:latest",
+    "seed-cohorts": "knex seed:make 01-cohorts",
+    "seed-students": "knex seed:make 02-students",
+    "run-seed-cohorts": "knex seed:run 01-cohorts",
+    "run-seed-students": "knex seed:run 02-students",
+    "seed": "knex seed:run",
+    "rollback": "knex migrate:rollback",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivanahuckova/webdb-iii-challenge.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ivanahuckova/webdb-iii-challenge/issues"
+  },
+  "homepage": "https://github.com/ivanahuckova/webdb-iii-challenge#readme"
+}
