@@ -79,5 +79,21 @@ server.delete('/api/cohorts/:id', async (req, res) => {
   }
 });
 
+// =========== COHORTS: PUT ROUTES ========== //
+server.put('/api/cohorts/:id', async (req, res) => {
+  try {
+    const isCohortUpdated = await db('cohorts')
+      .where({ id: req.params.id })
+      .update({ name: req.body.name });
+    if (isCohortUpdated) {
+      res.status(200).json({ message: `Cohort with id ${req.params.id} was updated` });
+    } else {
+      res.status(400).json({ message: 'Cohort with that id does not exists' });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 const port = process.env.PORT || 5000;
 server.listen(port, () => console.log(`\nrunning on ${port}\n`));
