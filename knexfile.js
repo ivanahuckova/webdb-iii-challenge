@@ -1,7 +1,8 @@
 module.exports = {
+  client: 'sqlite3',
   development: {
     client: 'sqlite3',
-    useNullAsDefaul: true,
+    useNullAsDefault: true,
     connection: {
       filename: './data/lambda.sqlite3'
     },
@@ -12,4 +13,4 @@ module.exports = {
       directory: './data/seeds'
     }
   }
-}
+};
