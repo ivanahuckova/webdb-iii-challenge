@@ -63,5 +63,21 @@ server.get('/api/cohorts/:id/students', async (req, res) => {
   }
 });
 
+// =========== COHORTS: DELETE ROUTES ========== //
+server.delete('/api/cohorts/:id', async (req, res) => {
+  try {
+    const isCohortDeleted = await db('cohorts')
+      .where({ id: req.params.id })
+      .first();
+    if (isCohortDeleted) {
+      res.status(200).json({ message: `Cohort with id ${req.params.id} was delted` });
+    } else {
+      res.status(400).json({ message: 'Cohort with that id does not exists' });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 const port = process.env.PORT || 5000;
 server.listen(port, () => console.log(`\nrunning on ${port}\n`));
