@@ -10,13 +10,14 @@ const server = express();
 server.use(helmet());
 server.use(express.json());
 
-// =========== COHORTS: POST ROUTES ========== //
+// =========== POST ROUTES ========== //
+// COHORTS
 
 server.post('/api/cohorts', async (req, res) => {
   try {
-    const id = await db('cohorts').insert(req.body);
+    const newCohortIdArray = await db('cohorts').insert(req.body);
     const newCohort = await db('cohorts')
-      .where({ id: id[0] })
+      .where({ id: newCohortIdArray[0] })
       .first();
     res.status(201).json(newCohort);
   } catch (error) {
@@ -24,9 +25,22 @@ server.post('/api/cohorts', async (req, res) => {
   }
 });
 
+// STUDENTS
+
+server.post('/api/students', async (req, res) => {
+  try {
+    const newStudentIdArray = await db('students').insert({ name: req.body.name, cohort_id: req.body.cohort_id });
+    const newStudent = await db('students')
+      .where({ id: newStudentIdArray[0] })
+      .first();
+    res.status(201).json(newStudent);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 // =========== GET ROUTES ========== //
 // COHORTS
-
 server.get('/api/cohorts', async (req, res) => {
   try {
     const cohorts = await db('cohorts');
@@ -65,7 +79,6 @@ server.get('/api/cohorts/:id/students', async (req, res) => {
 });
 
 // STUDENTS
-
 server.get('/api/students', async (req, res) => {
   try {
     const students = await db('students');
@@ -96,7 +109,7 @@ server.delete('/api/cohorts/:id', async (req, res) => {
   try {
     const isCohortDeleted = await db('cohorts')
       .where({ id: req.params.id })
-      .first();
+      .del();
     if (isCohortDeleted) {
       res.status(200).json({ message: `Cohort with id ${req.params.id} was delted` });
     } else {
@@ -108,12 +121,11 @@ server.delete('/api/cohorts/:id', async (req, res) => {
 });
 
 // STUDENTS
-
 server.delete('/api/students/:id', async (req, res) => {
   try {
     const isStudentDeleted = await db('students')
       .where({ id: req.params.id })
-      .first();
+      .del();
     if (isStudentDeleted) {
       res.status(200).json({ message: `Student with id ${req.params.id} was delted` });
     } else {
