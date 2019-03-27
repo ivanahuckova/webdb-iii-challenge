@@ -26,7 +26,6 @@ server.post('/api/cohorts', async (req, res) => {
 });
 
 // STUDENTS
-
 server.post('/api/students', async (req, res) => {
   try {
     const newStudentIdArray = await db('students').insert({ name: req.body.name, cohort_id: req.body.cohort_id });
@@ -136,7 +135,8 @@ server.delete('/api/students/:id', async (req, res) => {
   }
 });
 
-// =========== COHORTS: PUT ROUTES ========== //
+// =========== PUT ROUTES ========== //
+// COHORTS
 server.put('/api/cohorts/:id', async (req, res) => {
   try {
     const isCohortUpdated = await db('cohorts')
@@ -146,6 +146,22 @@ server.put('/api/cohorts/:id', async (req, res) => {
       res.status(200).json({ message: `Cohort with id ${req.params.id} was updated` });
     } else {
       res.status(400).json({ message: 'Cohort with that id does not exists' });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+// STUDENTS
+server.put('/api/students/:id', async (req, res) => {
+  try {
+    const isStudentUpdated = await db('students')
+      .where({ id: req.params.id })
+      .update({ name: req.body.name, cohort_id: req.body.cohort_id });
+    if (isStudentUpdated) {
+      res.status(200).json({ message: `Student with id ${req.params.id} was updated` });
+    } else {
+      res.status(400).json({ message: 'Student with that id does not exists' });
     }
   } catch (error) {
     res.status(500).json(error);
