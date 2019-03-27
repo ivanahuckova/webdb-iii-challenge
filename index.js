@@ -90,7 +90,8 @@ server.get('/api/students/:id', async (req, res) => {
   }
 });
 
-// =========== COHORTS: DELETE ROUTES ========== //
+// =========== DELETE ROUTES ========== //
+// COHORTS
 server.delete('/api/cohorts/:id', async (req, res) => {
   try {
     const isCohortDeleted = await db('cohorts')
@@ -100,6 +101,23 @@ server.delete('/api/cohorts/:id', async (req, res) => {
       res.status(200).json({ message: `Cohort with id ${req.params.id} was delted` });
     } else {
       res.status(400).json({ message: 'Cohort with that id does not exists' });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+// STUDENTS
+
+server.delete('/api/students/:id', async (req, res) => {
+  try {
+    const isStudentDeleted = await db('students')
+      .where({ id: req.params.id })
+      .first();
+    if (isStudentDeleted) {
+      res.status(200).json({ message: `Student with id ${req.params.id} was delted` });
+    } else {
+      res.status(400).json({ message: 'Student with that id does not exists' });
     }
   } catch (error) {
     res.status(500).json(error);
