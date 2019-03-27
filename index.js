@@ -10,7 +10,7 @@ const server = express();
 server.use(helmet());
 server.use(express.json());
 
-// =========== POST ROUTES ========== //
+// =========== COHORTS: POST ROUTES ========== //
 
 server.post('/api/cohorts', async (req, res) => {
   try {
@@ -19,6 +19,45 @@ server.post('/api/cohorts', async (req, res) => {
       .where({ id: id[0] })
       .first();
     res.status(201).json(newCohort);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+// =========== COHORTS: GET ROUTES ========== //
+
+server.get('/api/cohorts', async (req, res) => {
+  try {
+    const cohorts = await db('cohorts');
+    res.status(200).json(cohorts);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+server.get('/api/cohorts/:id', async (req, res) => {
+  try {
+    const cohort = await db('cohorts')
+      .where({ id: req.params.id })
+      .first();
+    if (cohort) {
+      res.status(200).json(cohort);
+    } else {
+      res.status(400).json({ message: 'Cohort with that id does not exists' });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
+server.get('/api/cohorts/:id/students', async (req, res) => {
+  try {
+    const arrayOfStudentsFromCohort = await db('students').where({ cohort_id: req.params.id });
+    if (arrayOfStudentsFromCohort.length > 0) {
+      res.status(200).json(arrayOfStudentsFromCohort);
+    } else {
+      res.status(400).json({ message: 'Cohort with that id does not have students' });
+    }
   } catch (error) {
     res.status(500).json(error);
   }
